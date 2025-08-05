@@ -1,5 +1,6 @@
 import { useState } from "react";
 import "./styles.css";
+import { useEffect } from "react";
 
 export default function App() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -17,6 +18,12 @@ export default function App() {
       console.error("Error fetching Pokémon data:", error);
     }
   };
+  const innerHeight = window.innerHeight;
+  const scrollY = window.scrollY;
+  const totalScroll = document.body.scrollHeight;
+  console.log("innerHeight", innerHeight, scrollY, totalScroll);
+
+  const infinityScroll = () => {};
 
   return (
     <div className="App">
