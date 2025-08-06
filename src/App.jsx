@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Discovery from './pages/Discovery';
-import MyCollection from './components/CollectionList';
+import CollectionList from './components/CollectionList';
 
 
 export default function App() {
@@ -12,7 +12,7 @@ export default function App() {
         <button onClick={() => setPage('discovery')} className="px-4 py-2 bg-blue-500 text-white rounded">Discovery</button>
         <button onClick={() => setPage('collection')} className="px-4 py-2 bg-green-500 text-white rounded">My Collection</button>
       </div>
-      {page === 'discovery' ? <Discovery /> : <MyCollection />}
+      {page === 'discovery' ? <Discovery /> : <CollectionList />}
     </div>
   );
 }

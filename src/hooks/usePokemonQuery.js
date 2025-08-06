@@ -4,7 +4,7 @@ export function usePokemonQuery() {
   return useInfiniteQuery({
     queryKey: ['pokemon'],
     queryFn: async ({ pageParam = 0 }) => {
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${pageParam}&limit=6`);
+      const res = await fetch(`https://pokeapi.co/api/v2/pokemon?offset=${pageParam}&limit=20`);
       const data = await res.json();
       return data;
     },
