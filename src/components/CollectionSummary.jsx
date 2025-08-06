@@ -3,7 +3,7 @@ import React from "react";
 export default function CollectionSummary({ collection }) {
   const typeCounts = {};
   collection.forEach((poke) => {
-    poke.details.types.forEach((t) => {
+    poke.details?.types?.forEach((t) => {
       const type = t.type.name;
       typeCounts[type] = (typeCounts[type] || 0) + 1;
     });
