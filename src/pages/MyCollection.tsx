@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { DndContext, closestCenter, DragEndEvent } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -26,15 +26,16 @@ export default function MyCollection() {
   const [showModal, setShowModal] = useState(false);
 
   // DnD reorder handler (normal mode only)
-  const handleDragEnd = (event: DragEndEvent) => {
+  const handleDragEnd = useCallback((event: DragEndEvent) => {
     const { active, over } = event;
     if (active && over && active.id !== over.id) {
-      const oldIndex = collection.findIndex((item) => item.name === active.id);
-      const newIndex = collection.findIndex((item) => item.name === over.id);
-      const newCollection = arrayMove(collection, oldIndex, newIndex);
-      setCollection(newCollection);
+      setCollection((prev) => {
+        const oldIndex = prev.findIndex((item) => item.name === active.id);
+        const newIndex = prev.findIndex((item) => item.name === over.id);
+        return arrayMove(prev, oldIndex, newIndex);
+      });
     }
-  };
+  }, [setCollection]);
 
   // Bulk select logic
   const handleSelectChange = (name: string, checked: boolean) => {
