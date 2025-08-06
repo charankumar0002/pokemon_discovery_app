@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { usePokemonQuery } from "../hooks/usePokemonQuery";
 import PokemonCard from "../components/PokemonCard";
 import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger";
+import { CgSpinner } from "react-icons/cg";
+import { updateCollection } from "../utils/updateCollection";
 
 function getInitialCollection() {
   try {
@@ -25,7 +27,7 @@ export default function Discovery() {
   function handleAdd(details) {
     const exists = collection.find((p) => p.name === details.name);
     if (!exists) {
-      setCollection([
+      const updated = [
         ...collection,
         {
           name: details.name,
@@ -36,15 +38,18 @@ export default function Discovery() {
             stats: [details.stats[0], details.stats[1], details.stats[2]],
           },
         },
-      ]);
+      ];
+      setCollection(updated);
+      updateCollection(updated); // This updates localStorage AND notifies App.jsx
     }
   }
 
   // Remove Pokémon
   function handleRemove(name) {
-    setCollection(collection.filter((p) => p.name !== name));
+    const updated = collection.filter((p) => p.name !== name);
+    setCollection(updated);
+    updateCollection(updated); // This updates localStorage AND notifies App.jsx
   }
-
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {data?.pages.map((page) =>
@@ -63,7 +68,7 @@ export default function Discovery() {
       {hasNextPage && <InfiniteScrollTrigger onVisible={fetchNextPage} />}
       {isFetchingNextPage && (
         <div className="col-span-full text-center text-white mt-4">
-          Loading more...
+          Loading more Pokemon...
         </div>
       )}
     </div>

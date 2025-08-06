@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 body {
   margin: 0;
   font-family: system-ui, sans-serif;
@@ -12,3 +11,5 @@ body {
 button {
   cursor: pointer;
 }
+.animate-fadein { animation: fadein 0.3s; }
+@keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
