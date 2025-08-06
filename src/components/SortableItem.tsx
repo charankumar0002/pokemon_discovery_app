@@ -1,9 +1,19 @@
-import React from "react";
+
 import PokemonCard from "./PokemonCard";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
+import { Pokemon } from '../types/pokemon';
 
-export default function SortableItem({ poke }) {
+interface CollectionItem {
+  name: string;
+  details?: Pokemon;
+}
+
+interface SortableItemProps {
+  poke: CollectionItem;
+}
+
+export default function SortableItem({ poke }: SortableItemProps) {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: poke.name });
   const style = { transform: CSS.Transform.toString(transform), transition };
@@ -16,7 +26,7 @@ export default function SortableItem({ poke }) {
       {...listeners}
       className="mb-8 cursor-grab relative transition-transform duration-300"
     >
-      <PokemonCard details={poke.details} mode="collection" />
+      <PokemonCard details={poke.details} mode="collection" name={poke.name} />
     </div>
   );
 }

@@ -1,6 +1,13 @@
-import React from "react";
 
-export default function RemoveModal({ open, count, onConfirm, onCancel }) {
+
+interface RemoveModalProps {
+  open: boolean;
+  count: number;
+  onConfirm: () => void;
+  onCancel: () => void;
+}
+
+export default function RemoveModal({ open, count, onConfirm, onCancel }: RemoveModalProps) {
   if (!open) return null;
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40">

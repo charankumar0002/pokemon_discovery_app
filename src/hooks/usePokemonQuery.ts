@@ -1,9 +1,10 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
+import { PokemonListResponse } from '../types/pokemon';
 
 export function usePokemonQuery() {
   return useInfiniteQuery({
     queryKey: ["pokemon"],
-    queryFn: async ({ pageParam = 0 }) => {
+    queryFn: async ({ pageParam = 0 }): Promise<PokemonListResponse> => {
       const res = await fetch(
         `https://pokeapi.co/api/v2/pokemon?offset=${pageParam}&limit=6`
       );
@@ -12,8 +13,9 @@ export function usePokemonQuery() {
     },
     getNextPageParam: (lastPage) => {
       return lastPage.next
-        ? new URL(lastPage.next).searchParams.get("offset")
+        ? Number(new URL(lastPage.next).searchParams.get("offset"))
         : undefined;
     },
+    initialPageParam: 0,
   });
 }

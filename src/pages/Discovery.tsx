@@ -1,13 +1,18 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { usePokemonQuery } from "../hooks/usePokemonQuery";
 import PokemonCard from "../components/PokemonCard";
 import InfiniteScrollTrigger from "../components/InfiniteScrollTrigger";
-import { CgSpinner } from "react-icons/cg";
 import { updateCollection } from "../utils/updateCollection";
+import { Pokemon } from '../types/pokemon';
 
-function getInitialCollection() {
+interface CollectionItem {
+  name: string;
+  details: Pokemon;
+}
+
+function getInitialCollection(): CollectionItem[] {
   try {
-    return JSON.parse(localStorage.getItem("collection")) || [];
+    return JSON.parse(localStorage.getItem("collection") || "[]");
   } catch {
     return [];
   }
@@ -16,7 +21,7 @@ function getInitialCollection() {
 export default function Discovery() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     usePokemonQuery();
-  const [collection, setCollection] = useState(getInitialCollection);
+  const [collection, setCollection] = useState<CollectionItem[]>(getInitialCollection);
 
   // Keep localStorage in sync
   useEffect(() => {
@@ -24,7 +29,7 @@ export default function Discovery() {
   }, [collection]);
 
   // Add Pokémon
-  function handleAdd(details) {
+  function handleAdd(details: Pokemon) {
     const exists = collection.find((p) => p.name === details.name);
     if (!exists) {
       const updated = [
@@ -40,22 +45,22 @@ export default function Discovery() {
         },
       ];
       setCollection(updated);
-      updateCollection(updated); // This updates localStorage AND notifies App.jsx
+      updateCollection(updated.map(item => item.details));
     }
   }
 
   // Remove Pokémon
-  function handleRemove(name) {
+  function handleRemove(name: string) {
     const updated = collection.filter((p) => p.name !== name);
     setCollection(updated);
-    updateCollection(updated); // This updates localStorage AND notifies App.jsx
+    updateCollection(updated.map(item => item.details));
   }
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-      {data?.pages.map((page) =>
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+      {data?.pages.map((page, pageIndex) =>
         page.results.map((poke) => (
           <PokemonCard
-            key={poke.name}
+            key={`${pageIndex}-${poke.name}`}
             name={poke.name}
             url={poke.url}
             inCollection={!!collection.find((p) => p.name === poke.name)}
@@ -67,7 +72,8 @@ export default function Discovery() {
       )}
       {hasNextPage && <InfiniteScrollTrigger onVisible={fetchNextPage} />}
       {isFetchingNextPage && (
-        <div className="col-span-full text-center text-white mt-4">
+        <div className="col-span-full text-center text-white mt-4 text-sm sm:text-base flex items-center justify-center gap-2">
+          <div className="animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></div>
           Loading more Pokemon...
         </div>
       )}

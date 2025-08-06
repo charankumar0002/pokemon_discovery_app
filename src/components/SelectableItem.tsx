@@ -1,7 +1,19 @@
-import React from "react";
-import PokemonCard from "./PokemonCard";
 
-export default function SelectableItem({ poke, selected, onSelectChange }) {
+import PokemonCard from "./PokemonCard";
+import { Pokemon } from '../types/pokemon';
+
+interface CollectionItem {
+  name: string;
+  details?: Pokemon;
+}
+
+interface SelectableItemProps {
+  poke: CollectionItem;
+  selected: boolean;
+  onSelectChange: (name: string, checked: boolean) => void;
+}
+
+export default function SelectableItem({ poke, selected, onSelectChange }: SelectableItemProps) {
   return (
     <div className="mb-8 relative group animate-fadein transition-all duration-300">
       <input
@@ -15,7 +27,7 @@ export default function SelectableItem({ poke, selected, onSelectChange }) {
           opacity: 1,
         }}
       />
-      <PokemonCard details={poke.details} mode="collection" />
+      <PokemonCard details={poke.details} mode="collection" name={poke.name} />
     </div>
   );
 }

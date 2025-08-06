@@ -1,7 +1,11 @@
-import React, { useEffect, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
-export default function InfiniteScrollTrigger({ onVisible }) {
-  const ref = useRef();
+interface InfiniteScrollTriggerProps {
+  onVisible: () => void;
+}
+
+export default function InfiniteScrollTrigger({ onVisible }: InfiniteScrollTriggerProps) {
+  const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
